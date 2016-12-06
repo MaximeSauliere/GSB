@@ -1,9 +1,3 @@
-/*
- * Créé le 23 févr. 2015
- *
- * TODO Pour changer le modèle de ce fichier généré, allez à :
- * Fenêtre - Préférences - Java - Style de code - Modèles de code
- */
 package gsb.service;
 
 import gsb.modele.Medecin;

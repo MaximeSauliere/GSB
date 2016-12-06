@@ -1,65 +1,76 @@
 package gsb.modele.dao;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-import gsb.modele.Localite;
-import gsb.modele.Unite;
+import gsb.modele.Visiteur;
 
 public class VisiteurDao {
 	
-	public static Visiteur rechercher(String codeVisiteur){
+	public static Visiteur rechercher(String matricule){
 		Visiteur unVisiteur = null;
-		Unite uneUnitee = null;
-		ResultSet reqSelection = ConnexionMySql.execReqSelection("select * from VISITEUR where MATRICULE ='"+codeVisiteur+"'");
+		
+		ResultSet reqSelection = ConnexionMySql.execReqSelection("select * from VISITEUR where MATRICULE ='"+matricule+"'");
 		try {
 			if (reqSelection.next()) {
-				uneUnite = UniteDao.rechercher(reqSelection.getString(10));
-				unVisiteur = new Visiteur(reqSelection.getString(1), reqSelection.getString(2), reqSelection.getString(3), reqSelection.getString(4), reqSelection.getString(6), reqSelection.getString(7), reqSelection.getDate(8), reqSelection.getInt(9), uneUnite);	
+				unVisiteur = new Visiteur(reqSelection.getString(1), reqSelection.getString(2), reqSelection.getString(3), reqSelection.getString(4), reqSelection.getString(5), reqSelection.getString(6), reqSelection.getString(7), reqSelection.getString(8));	
 			};
 			}
 		catch(Exception e) {
-			System.out.println("erreur reqSelection.next() pour la requête - select * from VISITEUR where MATRICULE ='"+codeVisiteur+"'");
+			System.out.println("erreur reqSelection.next() pour la requête - select * from VISITEUR where MATRICULE ='"+matricule+"'");
 			e.printStackTrace();
 			}
 		ConnexionMySql.fermerConnexionBd();
 		return unVisiteur;
 	}
 	
-	public static ArrayList<Visiteur> retournerCollectionDesVisiteur(){
-		ArrayList<Visiteur> collectionDesVisiteur = new ArrayList<Visiteur>();
-		ResultSet reqSelection = ConnexionMySql.execReqSelection("select CODEMED from MEDECIN");
+	public static int creer(Visiteur unVisiteur){
+		int result = 0;
+		String requeteInsertion;
+		
+		String matricule = unVisiteur.getMatricule();
+		String nom = unVisiteur.getNom();
+		String prenom = unVisiteur.getPrenom();
+		String login = unVisiteur.getLogin();
+		String mdp = unVisiteur.getMdp();
+		String adresse = unVisiteur.getAdresse();
+		String telephone = unVisiteur.getTelephone();
+		String dateEntree = unVisiteur.getDateEntree();
+
+		requeteInsertion = "insert into Visite values('"+matricule+"','"+nom+"','"+prenom+"','"+login+"','"+mdp+"','"+adresse+"','"+telephone+"','"+dateEntree+"')";
 		try{
-		while (reqSelection.next()) {
-			String codeVisiteur = reqSelection.getString(1);
-		    collectionDesVisiteur.add(MedecinDao.rechercher(codeVisiteur));
-			}
+			result = ConnexionMySql.execReqMaj(requeteInsertion);
 		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("erreur retournerCollectionDesMedecins()");
+		catch(Exception e){
+			System.out.println("echec insertion Visiteur");
 		}
-		return collectionDesVisiteur;
+		ConnexionMySql.fermerConnexionBd();
+		return result;
 	}
 	
-	public static HashMap<String,Visiteur> retournerDictionnaireDesVisiteur(){
-		HashMap<String, Visiteur> diccoDesMedecins = new HashMap<String, Visiteur>();
-		ResultSet reqSelection = ConnexionMySql.execReqSelection("select MATRICULE from Visiteur");
-		try{
-		while (reqSelection.next()) {
-			String codeVisiteur = reqSelection.getString(1);
-		    diccoDesVisiteur.put(codeVisiteur, MedecinDao.rechercher(codeVisiteur));
-			}
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("erreur retournerDiccoDesMedecins()");
-		}
-		return diccoDesVisiteur;
+	public static int supprimer(String matricule){
+		String requeteSuppression = "delete from Visiteur where ='"+matricule+"'";
+		int result = ConnexionMySql.execReqMaj(requeteSuppression);
+		ConnexionMySql.fermerConnexionBd();
+		return result;	
 	}
-
-}
-
+	
+	public static int modifier(Visiteur unVisiteur){
+		String requeteModification;
+		
+		String matricule = unVisiteur.getMatricule();
+		String nom = unVisiteur.getNom();
+		String prenom = unVisiteur.getPrenom();
+		String login = unVisiteur.getLogin();
+		String mdp = unVisiteur.getMdp();
+		String adresse = unVisiteur.getAdresse();
+		String telephone = unVisiteur.getTelephone();
+		String dateEntree = unVisiteur.getDateEntree();
+	
+		requeteModification = "update Visiteur set reference  = '"+matricule+"','"+nom+"','"+prenom+"','"+login+"','"+mdp+"','"+adresse+"','"+telephone+"','"+dateEntree+"')";
+		int result = ConnexionMySql.execReqMaj(requeteModification);
+		ConnexionMySql.fermerConnexionBd();
+		return result;
+	}
+	
+	
 }

@@ -43,7 +43,6 @@ public class JIFMedecinListeDic extends JInternalFrame implements ActionListener
 	//private ArrayList<Medecin> lesMedecins;
 	private HashMap<String,Medecin> diccoMedecin;
 
-
 	protected JPanel p;
 	protected JScrollPane scrollPane;
 	protected JPanel pSaisie;
@@ -75,7 +74,7 @@ public class JIFMedecinListeDic extends JInternalFrame implements ActionListener
 			data[i][3] = uneEntree.getValue().getLaLocalite().getVille() ;
 			i++;
 			}
-		String[] columnNames = {"Code", "Nom","Prenom","Ville"};
+		String[] columnNames = {"Code","Nom","Prenom","Ville"};
 		table = new JTable(data, columnNames);
 		table.getSelectionModel().addListSelectionListener(table);
 		

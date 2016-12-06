@@ -1,15 +1,8 @@
-/*
- * Créé le 22 févr. 2015
- *
- * TODO Pour changer le modèle de ce fichier généré, allez à :
- * Fenêtre - Préférences - Java - Style de code - Modèles de code
- */
 package gsb.modele.dao;
-
-import gsb.modele.Localite;
 
 import java.sql.ResultSet;
 
+import gsb.modele.Localite;
 
 /**
  * @author Isabelle
@@ -34,5 +27,39 @@ public class LocaliteDao {
 		ConnexionMySql.fermerConnexionBd();
 		return uneLocalite;
 	}
+	
+	public static int creer(Localite uneLocalite){
+		int result = 0;
+		String requeteInsertion;
+		String codePostal = uneLocalite.getCodePostal();
+		String ville = uneLocalite.getVille();
+		requeteInsertion = "insert into Affaire values('"+codePostal+"','"+ville+"')";
+		try{
+			result = ConnexionMySql.execReqMaj(requeteInsertion);
+		}
+		catch(Exception e){
+			System.out.println("echec insertion Localite");
+		}
+		ConnexionMySql.fermerConnexionBd();
+		return result;
+	}
+	
+	public static int supprimer(String codePostal){
+		String requeteSuppression = "delete from Localite where ='"+codePostal+"'";
+		int result = ConnexionMySql.execReqMaj(requeteSuppression);
+		ConnexionMySql.fermerConnexionBd();
+		return result;	
+	}
+	
+	public static int modifier(Localite uneLocalite){
+		String requeteModification;
+		String codePostal= uneLocalite.getCodePostal();
+		String ville = uneLocalite.getVille();
+		requeteModification = "update Localite set codePostal ='"+codePostal+"',ville='"+ville+"'";
+		int result = ConnexionMySql.execReqMaj(requeteModification);
+		ConnexionMySql.fermerConnexionBd();
+		return result;
+	}
+
 
 }
